@@ -18,8 +18,9 @@ You may test your program against Fakebook, or against this assignment page. We 
 - [ ] send raw socket 
 - [ ] receive raw socket
 - [ ] Makefile
-#### IP functionality 
+#### IP's functionality 
   - [ ] checksum 
+  .....
 #### TCP's functionality
 - [ ] TCP connection (3-way handshake)
 - [ ] TCP teardown 
