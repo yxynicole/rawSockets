@@ -14,7 +14,6 @@ You may test your program against Fakebook, or against this assignment page. We 
 - modifying IP Tables --> `iptables`
 
 ### TO DO 
-- [ ] parser
 - [ ] send raw socket 
 - [ ] receive raw socket
 - [ ] Makefile
