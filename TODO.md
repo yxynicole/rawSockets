@@ -14,9 +14,10 @@ You may test your program against Fakebook, or against this assignment page. We 
 - modifying IP Tables --> `iptables`
 
 ### TO DO 
-- [ ] send raw socket 
-- [ ] receive raw socket
+- [x] send raw socket -SOCK_RAW/IPPROTO_RAW
+- [x] receive raw socket -SOCK_STREAM/IPPROTO_IP
 - [ ] Makefile
+- [x] file - index.html or url[-1]
 #### IP's functionality 
   - [ ] checksum 
   .....
