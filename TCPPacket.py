@@ -1,29 +1,30 @@
 import socket
 from struct import *
 import sys
+import config
 
 class TCPPacket:
 
-    def __init__(self, sender_port, seq_num, ack_num, src_ip, dest_ip, syn_flag, ack_flag, data):
-        self.src_port = sender_port
-        self.dest_port = 80
-        self.seq_num = seq_num
-        self.ack_num = ack_num
+    def __init__(self, src_ip, dest_ip):
+        self.src_port = config.SRC_PORT
+        self.dest_port = config.DEST_PORT
+        self.seq_num = 0
+        self.ack_num = 0
         self.data_offset = 5 << 4
         self.window = socket.htons(5840)
         self.checksum = 0 
         self.urgent_pointer = 0
-        self.data = data
-        self.set_flags(syn_flag, ack_flag)
+        self.data = ''
+        self.flags = 0
 
         self.src_ip = src_ip
         self.dest_ip = dest_ip
 
-    def set_flags(self, syn_flag, ack_flag):
+    def set_flags(self, syn_flag=0, ack_flag=0, psh_flag=0):
         fin_flag = 0
         syn_flag = syn_flag
         rst_flag = 0
-        psh_flag = 0
+        psh_flag = psh_flag
         ack_flag = ack_flag
         urg_flag = 0
 
@@ -35,7 +36,7 @@ class TCPPacket:
         for i in range(0, len(body), 2):
 
             int1 = ord(body[i])
-            int2 = ord(body[i+1])
+            int2 = ord(body[i+1]) if i+1 < len(body) else 0
             b_sum = b_sum + (int1+(int2 << 8))
             
         # One's Complement
@@ -53,7 +54,7 @@ class TCPPacket:
             self.data_offset,
             self.flags,
             self.window,
-            self.checksum,
+            0,
             self.urgent_pointer
         )
 
@@ -63,7 +64,6 @@ class TCPPacket:
         placeholder = 0
         protocol = socket.IPPROTO_TCP
         tcp_length = len(temp_header) + len(self.data)
-        print("tcp_length is " + str(tcp_length))
 
         psh = pack('!4s4sBBH', src_address, dest_address, placeholder, protocol, tcp_length)
 
@@ -85,3 +85,9 @@ class TCPPacket:
         tcp_packet = tcp_header + self.data
         return tcp_packet
    
+    def __str__(self):
+        return ("src_port={}, dest_port={}, seq={}, ack={}, "
+        "data_offset={}, flags={:05b}, win={}, chksum={}, urg_ptr={}").format(
+            self.src_port, self.dest_port, self.seq_num, self.ack_num, self.data_offset, self.flags, self.window,
+            self.checksum, self.urgent_pointer
+        )
