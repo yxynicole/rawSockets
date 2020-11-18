@@ -23,7 +23,7 @@ def do_handshake(s_sock, r_sock, s_ip_header, s_tcp_header, src_ip, dest_ip):
             if seq_num_from_server != -1:
                 break
             else:
-            	print(r_tcp_header[:4], config.SRC_PORT, config.STARTING_SEQ_NUM+1)
+                print(r_tcp_header[:4], config.SRC_PORT, config.STARTING_SEQ_NUM+1)
         if time.time() > timeout:
             print('handshake timeout')
             sys.exit(1)
@@ -33,3 +33,25 @@ def do_handshake(s_sock, r_sock, s_ip_header, s_tcp_header, src_ip, dest_ip):
     s_tcp_header.ack_num = seq_num_from_server
     s_tcp_header.set_flags(ack_flag=1)
     send(s_sock, dest_ip, s_ip_header, s_tcp_header)
+    if config.DEBUG:
+        print('\nConnection established')
+
+def close_connection(s_sock, r_sock, dest_ip, s_ip_header, s_tcp_header):
+    if config.DEBUG:
+        print('Closing connection')
+
+    # ack the fin flag
+    s_tcp_header.set_flags(ack_flag=1)
+    send(s_sock, dest_ip, s_ip_header, s_tcp_header)
+
+    # new seq
+    s_tcp_header.set_flags(fin_flag=1)
+    s_tcp_header.seq_num += 1
+    send(s_sock, dest_ip, s_ip_header, s_tcp_header)
+
+    # while True:
+    #     r_ip_header, r_tcp_header, _ = recv(r_sock)
+    #     send(s_sock, dest_ip, s_ip_header, s_tcp_header)
+
+    s_sock.close()
+    r_sock.close()

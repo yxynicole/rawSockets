@@ -1,7 +1,9 @@
+import config
+
 def save_file(response, path):
 	filename = path.split('/')[-1]
 	if not filename: filename = 'index.html'
-	print('writting to file', filename)
+	if config.DEBUG: print('writting to file', filename)
 	with open(filename, "w") as f:
 		f.write(response)
 
