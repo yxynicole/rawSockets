@@ -14,15 +14,15 @@ You may test your program against Fakebook, or against this assignment page. We 
 - modifying IP Tables --> `iptables`
 
 ### TO DO 
-- [ ] send raw socket 
-- [ ] receive raw socket
-- [ ] Makefile
+- [x] send raw socket 
+- [x] receive raw socket
+- [x] Makefile
 #### IP's functionality 
   - [ ] checksum 
   .....
 #### TCP's functionality
-- [ ] TCP connection (3-way handshake)
-- [ ] TCP teardown 
+- [x] TCP connection (3-way handshake)
+- [x] TCP teardown 
 - [ ] Timeout
 - [ ] re-order pakcets 
 - [ ] identify and discard duplicate packets

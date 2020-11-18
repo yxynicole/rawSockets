@@ -28,7 +28,7 @@ class TCPPacket:
         self.window = socket.htons(5840)
         self.checksum = 0 
         self.urgent_pointer = 0
-        self.data = ''
+        self.data = b''
         self.flags = 0
 
         self.src_ip = src_ip

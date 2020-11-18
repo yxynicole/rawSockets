@@ -26,6 +26,6 @@ if __name__=='__main__':
     response = http_get(s_sock, r_sock, hostname, path, src_ip, dest_ip, s_ip_header, s_tcp_header)
     save_file(response, path)
 
-    print("end")
+    if config.DEBUG: print("Done")
 
 
