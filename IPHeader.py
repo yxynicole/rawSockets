@@ -4,6 +4,21 @@ import socket
 from struct import *
 
 class IPHeader:
+    @classmethod
+    def from_packet(cls, packet):
+        h = cls(None, None)
+        h.version=packet[0]>>4
+        h.ihl=packet[0] &0b1111
+        h.type_of_service=packet[1]
+        h.length=packet[2]
+        h.identification=packet[3]
+        h.frag_offset = packet[4]
+        h.ttl=packet[5]
+        h.protocal=packet[6]
+        h.checksum=packet[7]
+        h.src_ip=socket.inet_ntoa(packet[8])
+        h.dest_ip=socket.inet_ntoa(packet[9])
+        return h
 
     def __init__(self, src_ip, dest_ip):
         self.version = 4

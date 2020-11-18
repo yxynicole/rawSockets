@@ -29,31 +29,31 @@ def collect_data(s_sock, r_sock, src_ip, dest_ip, s_ip_header, s_tcp_header):
     s_tcp_header.data = '' # clear http header
 
     r_ip_header, r_tcp_header, data = recv(r_sock)
-    seq_expected = r_tcp_header[2] + len(data)
-    ack_expected = r_tcp_header[3]
-    raw_message = data
+    seq_expected = r_tcp_header.seq_num + len(data)
+    ack_expected = r_tcp_header.ack_num
+    raw_messages = [data]
     try:
     	while True:
 	        r_ip_header, r_tcp_header, data = recv(r_sock)
 	        if filter_message(r_ip_header, r_tcp_header, src_ip, dest_ip, seq_expected, ack_expected):
-	            raw_message += data
-	            ack_expected = s_tcp_header.seq_num = r_tcp_header[3]
-	            seq_expected = s_tcp_header.ack_num =  r_tcp_header[2] + len(data)
+	            # print("*"*50, r_tcp_header, data)
+	            raw_messages.append(data)
+	            ack_expected = s_tcp_header.seq_num = r_tcp_header.ack_num
+	            seq_expected = s_tcp_header.ack_num =  r_tcp_header.seq_num + len(data)
 	            s_tcp_header.set_flags(ack_flag=1)
 	            send(s_sock, dest_ip, s_ip_header, s_tcp_header)
 
-    except:
-        print raw_message
+    except KeyboardInterrupt:
+        pass
 
-    return raw_message
+    return ''.join(raw_messages)
 
 def filter_message(ip_header, tcp_header, src_ip, dest_ip, seq_expected, ack_expected):
-    if config.DEBUG: print('seq-ack', tcp_header[2:4], seq_expected, ack_expected, 'flag', tcp_header[4])
     return all([
-        ip_header[8] == dest_ip,
-        ip_header[9] == src_ip,
-        tcp_header[2] == seq_expected,
-        tcp_header[3] == ack_expected,
-        config.SRC_PORT == tcp_header[1],
-        not(1 & tcp_header[5]) # finish flag
+        ip_header.src_ip == dest_ip,
+        ip_header.dest_ip == src_ip,
+        tcp_header.seq_num == seq_expected,
+        tcp_header.ack_num== ack_expected,
+        config.SRC_PORT == tcp_header.dest_port,
+        not(1 & tcp_header.flags) # finish flag
     ])

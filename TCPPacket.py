@@ -4,6 +4,20 @@ import sys
 import config
 
 class TCPPacket:
+    @classmethod
+    def from_packet(cls, packet):
+        h = cls(None, None)
+        h.src_port = packet[0]
+        h.dest_port = packet[1]
+        h.seq_num = packet[2]
+        h.ack_num = packet[3]
+        h.data_offset = packet[4]
+        h.flags = packet[5]
+        h.window = packet[6]
+        h.checksum = packet[7]
+        h.urgent_pointer = packet[8]
+        return h
+
 
     def __init__(self, src_ip, dest_ip):
         self.src_port = config.SRC_PORT
