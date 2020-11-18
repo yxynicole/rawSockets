@@ -3,10 +3,23 @@ from struct import *
 import sys
 import config
 
+
+def get_checksum(body):
+    b_sum = 0
+
+    for i in range(0, len(body), 2):
+        int1 = ord(body[i])
+        int2 = ord(body[i+1]) if i+1 < len(body) else 0
+        b_sum = b_sum + (int1+(int2 << 8))
+    # One's Complement
+    b_sum = b_sum+ (b_sum >> 16)
+    b_sum = ~b_sum & 0xffff
+    return b_sum
+
 class TCPPacket:
     @classmethod
-    def from_packet(cls, packet):
-        h = cls(None, None)
+    def from_packet(cls, packet, src_ip, dest_ip):
+        h = cls(src_ip, dest_ip)
         h.src_port = packet[0]
         h.dest_port = packet[1]
         h.seq_num = packet[2]
@@ -44,22 +57,7 @@ class TCPPacket:
 
         self.flags = fin_flag + (syn_flag << 1) + (rst_flag << 2) + (psh_flag << 3) + (ack_flag << 4) + (urg_flag << 5)
     
-    def calculate_checksum(self, body):
-        b_sum = 0
-
-        for i in range(0, len(body), 2):
-
-            int1 = ord(body[i])
-            int2 = ord(body[i+1]) if i+1 < len(body) else 0
-            b_sum = b_sum + (int1+(int2 << 8))
-            
-        # One's Complement
-        b_sum = b_sum+ (b_sum >> 16)
-        b_sum = ~b_sum & 0xffff
-        return b_sum
-
-    def set_checksum(self):
-
+    def calculate_checksum(self):
         temp_header = pack('!HHLLBBHHH', 
             self.src_port, 
             self.dest_port, 
@@ -83,12 +81,18 @@ class TCPPacket:
 
         body = psh + temp_header + self.data
 
-        self.checksum = self.calculate_checksum(body)
-        return
-    
+        return get_checksum(body)
+
+    def set_checksum(self):
+        self.checksum = self.calculate_checksum()
+
+    def verify_checksum(self):
+        checksum = self.calculate_checksum()
+        return self.checksum == checksum
+
     def form_tcp_packet(self):
         self.set_checksum()
-        tcp_header = tcp_header = pack('!HHLLBBH', 
+        tcp_header = pack('!HHLLBBH', 
             self.src_port, 
             self.dest_port, 
             self.seq_num, 

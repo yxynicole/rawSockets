@@ -1,6 +1,6 @@
-import random, sys
+import random
 
-DEBUG = '--no-log' not in sys.argv
+DEBUG = False
 
 SRC_PORT = random.randint(6000, 10000) #Randomly picked number, doesn't have special significance 
 DEST_PORT = 80 #http uses 80

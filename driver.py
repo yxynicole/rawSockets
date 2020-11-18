@@ -1,17 +1,23 @@
 from TCPPacket import *
 from IPHeader import *
 from ConnectionUtils import *
-import binascii, socket
+import binascii, socket, sys
 from http import *
 from utils import *
 from handshake import *
 import config
+import argparse
+
+parser =  argparse.ArgumentParser('rawhttpget')
+
+parser.add_argument('url')
+parser.add_argument('--debug', action='store_true', default=False)
 
 
 if __name__=='__main__':
-
-    url = "http://david.choffnes.com/classes/cs4700fa20/project4.php"
-    hostname, path = extract_hostname_and_path(url)
+    options = parser.parse_args()
+    config.DEBUG = options.debug
+    hostname, path = extract_hostname_and_path(options.url)
     src_ip = get_sender_IP_address()
     dest_ip = socket.gethostbyname(hostname)
     
@@ -27,5 +33,4 @@ if __name__=='__main__':
     save_file(response, path)
 
     if config.DEBUG: print("Done")
-
 

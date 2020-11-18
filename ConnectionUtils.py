@@ -47,12 +47,14 @@ def send(s, dest_ip, ip_header, tcp_header):
 def recv(s):
     packet = s.recv(65535)
     ip_header = IPHeader.from_packet(unpack("BBHHHBBH4s4s", packet[0:20]))
-    tcp_header = TCPPacket.from_packet(unpack("!HHLLBBHHH", packet[20:40]))
+    tcp_header = TCPPacket.from_packet(unpack("!HHLLBBHHH", packet[20:40]), ip_header.src_ip, ip_header.dest_ip)
     tcp_header.data = packet[40:]
+
     if config.DEBUG and tcp_header.dest_port == config.SRC_PORT:
         print("-- recv --")
         print(ip_header)
         print(tcp_header)
+    #print('checksum passed:', tcp_header.verify_checksum())
     return ip_header, tcp_header, packet[40:]
 
 # Returns true if source and destination IP address match what is expected
