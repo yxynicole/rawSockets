@@ -23,9 +23,9 @@ You may test your program against Fakebook, or against this assignment page. We 
 #### TCP's functionality
 - [x] TCP connection (3-way handshake)
 - [x] TCP teardown 
-- [ ] Timeout
-- [ ] re-order pakcets 
-- [ ] identify and discard duplicate packets
+- [x] Timeout
+- [x] re-order pakcets 
+- [x] identify and discard duplicate packets
 - [ ] congestion control 
 
 https://www.binarytides.com/raw-socket-programming-in-python-linux/

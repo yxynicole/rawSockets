@@ -74,13 +74,3 @@ def validate_syn_ack_tcp_header(tcp_header, sender_port, ack_num):
         return tcp_header.seq_num #returns sequence number
     else:
         return -1 # returns -1 to indicate not a valid syn_ack response
-   
-
-def filter_message(ip_header, tcp_header, src_ip, dest_ip, seq_expected, ack_expected):
-    return all([
-        ip_header.src_ip == dest_ip,
-        ip_header.dest_ip == src_ip,
-        tcp_header.seq_num == seq_expected,
-        tcp_header.ack_num== ack_expected,
-        config.SRC_PORT == tcp_header.dest_port,
-    ])
