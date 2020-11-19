@@ -47,10 +47,10 @@ class TCPPacket:
         self.src_ip = src_ip
         self.dest_ip = dest_ip
 
-    def set_flags(self, fin_flag=0, syn_flag=0, ack_flag=0, psh_flag=0):
+    def set_flags(self, fin_flag=0, syn_flag=0, rst_flag=0, ack_flag=0, psh_flag=0):
         fin_flag = fin_flag
         syn_flag = syn_flag
-        rst_flag = 0
+        rst_flag = rst_flag
         psh_flag = psh_flag
         ack_flag = ack_flag
         urg_flag = 0

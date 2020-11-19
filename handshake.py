@@ -22,8 +22,6 @@ def do_handshake(s_sock, r_sock, s_ip_header, s_tcp_header, src_ip, dest_ip):
             seq_num_from_server = validate_syn_ack_tcp_header(r_tcp_header, config.SRC_PORT, config.STARTING_SEQ_NUM+1) #returns -1 if invalid tcp syn ack header
             if seq_num_from_server != -1:
                 break
-            else:
-                print(r_tcp_header[:4], config.SRC_PORT, config.STARTING_SEQ_NUM+1)
         if time.time() > timeout:
             print('handshake timeout')
             sys.exit(1)

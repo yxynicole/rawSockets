@@ -43,7 +43,7 @@ class IPHeader:
         return ip_header
 
     def __str__(self):
-        return ("ihl_ver={}, tos={}, len={}, id={}, "
+        return ("ihl_ver={:08b}, tos={}, len={}, id={}, "
             "frag_offset={}, ttl={}, proto={}, chksum={}, src_ip={}, dest_ip={}"
         ).format((self.version << 4) + self.ihl, self.type_of_service, self.length, 
             self.identification, self.frag_offset, self.ttl, self.protocol, self.checksum,

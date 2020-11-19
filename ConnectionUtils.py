@@ -54,7 +54,11 @@ def recv(s):
         print("-- recv --")
         print(ip_header)
         print(tcp_header)
-    #print('checksum passed:', tcp_header.verify_checksum())
+        # print packet
+        # print(' '.join(["{:02x}".format(ord(i)) for i in packet[:20]]))
+        # print(' '.join(["{:02x}".format(ord(i)) for i in packet[20:40]]))
+        # print(' '.join(["{:02x}".format(ord(i)) for i in packet[40:]]))
+    #  print('checksum passed:', tcp_header.verify_checksum(), tcp_header.calculate_checksum(), str(tcp_header))
     return ip_header, tcp_header, packet[40:]
 
 # Returns true if source and destination IP address match what is expected

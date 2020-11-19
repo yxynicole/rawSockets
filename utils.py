@@ -3,7 +3,7 @@ import config
 def save_file(response, path):
 	filename = path.split('/')[-1]
 	if not filename: filename = 'index.html'
-	if config.DEBUG: print('writting to file', filename)
+	print('writting to file {}'.format(filename))
 	with open(filename, "w") as f:
 		f.write(response)
 
