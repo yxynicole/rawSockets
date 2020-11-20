@@ -43,6 +43,8 @@ def get_http_header(path, hostname):
 
 
 def collect_data(s_sock, r_sock, src_ip, dest_ip, s_ip_header, s_tcp_header):
+
+    global CWND
     
     s_tcp_header.data = '' # clear http header
     s_tcp_header.set_flags(ack_flag=1) # rest of packet should be ack only
