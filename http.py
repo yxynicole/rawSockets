@@ -2,8 +2,12 @@ import socket, sys, time
 from ConnectionUtils import recv, send
 import config
 from handshake import close_connection
+from collections import deque
 
 EOF = '0\r\n\r\n'
+MAX_CWND = 1000 # max congestion window
+CWND = 1 # congestion window
+
 
 def http_get(s_sock, r_sock, hostname, path, src_ip, dest_ip, s_ip_header, s_tcp_header):
     print('Request to - http://{}{}'.format(hostname, path))
@@ -11,7 +15,7 @@ def http_get(s_sock, r_sock, hostname, path, src_ip, dest_ip, s_ip_header, s_tcp
 
     s_tcp_header.set_flags(ack_flag=1, psh_flag=1)
     s_tcp_header.data = http_header
-    
+
     send(s_sock, dest_ip, s_ip_header, s_tcp_header)
 
     resp = collect_data(s_sock, r_sock, src_ip, dest_ip, s_ip_header, s_tcp_header)
@@ -53,6 +57,8 @@ def collect_data(s_sock, r_sock, src_ip, dest_ip, s_ip_header, s_tcp_header):
     while True:
         r_ip_header, r_tcp_header, data = recv(r_sock)
         if filter_message(r_ip_header, r_tcp_header, src_ip, dest_ip, seq_expected, ack_expected):
+            if CWND < MAX_CWND:
+                CWND += 1
             if r_tcp_header.seq_num == seq_expected:
                 if config.DEBUG: print("user data sample", "*"*50, data[:20], data[-20:])
                 raw_message += data
@@ -76,6 +82,7 @@ def collect_data(s_sock, r_sock, src_ip, dest_ip, s_ip_header, s_tcp_header):
 
                 send(s_sock, dest_ip, s_ip_header, s_tcp_header)
             else:
+                CWND = 1
                 # request to resend since missing / out of order
                 send(s_sock, dest_ip, s_ip_header, s_tcp_header)
         # timeout
