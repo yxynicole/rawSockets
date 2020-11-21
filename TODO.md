@@ -16,17 +16,17 @@ You may test your program against Fakebook, or against this assignment page. We 
 ### TO DO 
 - [x] send raw socket -SOCK_RAW/IPPROTO_RAW
 - [x] receive raw socket -SOCK_STREAM/IPPROTO_IP
-- [ ] Makefile
+- [x] Makefile
 - [x] file - index.html or url[-1]
 #### IP's functionality 
   - [ ] checksum 
   .....
 #### TCP's functionality
-- [ ] TCP connection (3-way handshake)
-- [ ] TCP teardown 
-- [ ] Timeout
-- [ ] re-order pakcets 
-- [ ] identify and discard duplicate packets
+- [x] TCP connection (3-way handshake)
+- [x] TCP teardown 
+- [x] Timeout
+- [x] re-order pakcets 
+- [x] identify and discard duplicate packets
 - [ ] congestion control 
 
 https://www.binarytides.com/raw-socket-programming-in-python-linux/
