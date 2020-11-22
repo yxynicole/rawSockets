@@ -10,6 +10,11 @@ CWND = 1 # congestion window
 
 
 def http_get(s_sock, r_sock, hostname, path, src_ip, dest_ip, s_ip_header, s_tcp_header):
+    '''
+    Makes an HTTP GET request and returns the html returned in the data portion of returned packets
+    If resposne to GET request is not 200 OK, exits the program
+    '''
+
     print('Request to - http://{}{}'.format(hostname, path))
     http_header = get_http_header(path, hostname)
 
@@ -33,6 +38,9 @@ def http_get(s_sock, r_sock, hostname, path, src_ip, dest_ip, s_ip_header, s_tcp
 
 
 def get_http_header(path, hostname):
+    '''
+    Forms a GET request in byte format with the given path and hostname
+    '''
     return b"\r\n".join([
         b"GET {} HTTP/1.1".format(path),
         b"Host: {}".format(hostname),
@@ -43,6 +51,15 @@ def get_http_header(path, hostname):
 
 
 def collect_data(s_sock, r_sock, src_ip, dest_ip, s_ip_header, s_tcp_header):
+
+    '''
+    Receives incoming packets on socket and returns in order data (html in this case) portion of incoming packets
+    Only collects packets intended for the port used in this program
+    Verfies that incoming packets have expected sequence and ack numbers
+    In the event of unrecognized packet or out of order packet, resends get requests
+    Initiates connection close if timeout occurs
+
+    '''
 
     global CWND
     

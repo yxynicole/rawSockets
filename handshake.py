@@ -47,9 +47,5 @@ def close_connection(s_sock, r_sock, dest_ip, s_ip_header, s_tcp_header):
     s_tcp_header.seq_num += 1
     send(s_sock, dest_ip, s_ip_header, s_tcp_header)
 
-    # while True:
-    #     r_ip_header, r_tcp_header, _ = recv(r_sock)
-    #     send(s_sock, dest_ip, s_ip_header, s_tcp_header)
-
     s_sock.close()
     r_sock.close()

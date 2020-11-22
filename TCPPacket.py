@@ -1,3 +1,5 @@
+
+
 import socket
 from struct import *
 import sys
@@ -11,11 +13,12 @@ def get_checksum(body):
         int1 = ord(body[i])
         int2 = ord(body[i+1]) if i+1 < len(body) else 0
         b_sum = b_sum + (int1+(int2 << 8))
-    # One's Complement
+    
     b_sum = b_sum+ (b_sum >> 16)
     b_sum = ~b_sum & 0xffff
     return b_sum
 
+# A class to represent a TCP packet
 class TCPPacket:
     @classmethod
     def from_packet(cls, packet, src_ip, dest_ip):

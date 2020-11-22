@@ -38,10 +38,6 @@ def send(s, dest_ip, ip_header, tcp_header):
         print("\n-- sent --")
         print(ip_header)
         print(tcp_header)
-        # print packet[40:]
-        # print(' '.join(["{:02x}".format(ord(i)) for i in packet[:20]]))
-        # print(' '.join(["{:02x}".format(ord(i)) for i in packet[20:40]]))
-        # print(' '.join(["{:02x}".format(ord(i)) for i in packet[40:]]))
 
 
 def recv(s):
@@ -54,11 +50,6 @@ def recv(s):
         print("-- recv --")
         print(ip_header)
         print(tcp_header)
-        # print packet
-        # print(' '.join(["{:02x}".format(ord(i)) for i in packet[:20]]))
-        # print(' '.join(["{:02x}".format(ord(i)) for i in packet[20:40]]))
-        # print(' '.join(["{:02x}".format(ord(i)) for i in packet[40:]]))
-    #  print('checksum passed:', tcp_header.verify_checksum(), tcp_header.calculate_checksum(), str(tcp_header))
     return ip_header, tcp_header, packet[40:]
 
 # Returns true if source and destination IP address match what is expected
@@ -67,10 +58,8 @@ def validate_ip_header(ip_header, expected_source_addr, expected_dest_addr):
     return ip_header.src_ip == expected_source_addr and ip_header.dest_ip == expected_dest_addr
 
 # Returns the sequence number sent by the server, or -1 if tcp header is invalid
-# Still needs to add some more validations, like validating checksum of tcp_header
 def validate_syn_ack_tcp_header(tcp_header, sender_port, ack_num):
-    # 18 for tcp_header[5] indicates ack and syn flags are set to 1 - a bit hacky can revisist this to make it more clean
-    if (tcp_header.dest_port == sender_port and tcp_header.ack_num == ack_num and tcp_header.flags == 18):
+    if (tcp_header.dest_port == sender_port and tcp_header.ack_num == ack_num):
         return tcp_header.seq_num #returns sequence number
     else:
         return -1 # returns -1 to indicate not a valid syn_ack response

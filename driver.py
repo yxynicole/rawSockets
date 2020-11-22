@@ -21,7 +21,6 @@ if __name__=='__main__':
     src_ip = get_sender_IP_address()
     dest_ip = socket.gethostbyname(hostname)
     
-    # Send initial syn as part of TCP three-way handshake
     s_ip_header = IPHeader(src_ip, dest_ip)
     s_tcp_header = TCPPacket(src_ip, dest_ip)
 
